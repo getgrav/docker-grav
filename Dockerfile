@@ -16,6 +16,25 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip
 
+# set recommended PHP.ini settings
+# see https://secure.php.net/manual/en/opcache.installation.php
+RUN { \
+		echo 'opcache.memory_consumption=128'; \
+		echo 'opcache.interned_strings_buffer=8'; \
+		echo 'opcache.max_accelerated_files=4000'; \
+		echo 'opcache.revalidate_freq=2'; \
+		echo 'opcache.fast_shutdown=1'; \
+		echo 'opcache.enable_cli=1'; \
+		echo 'upload_max_filesize=128M'; \
+		echo 'post_max_size=128M'; \
+	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+RUN a2enmod rewrite expires
+
+# provide container inside image for data persistance
+VOLUME /var/www/html
+
+
 RUN pecl install apcu \
     && pecl install yaml \
     && docker-php-ext-enable apcu yaml
