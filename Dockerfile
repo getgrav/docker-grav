@@ -49,7 +49,8 @@ WORKDIR /var/www
 RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GRAV_VERSION} && \
     echo "$GRAV_SHA1 grav-admin.zip" | sha1sum -c - && \
     unzip grav-admin.zip && \
-    mv -T /var/www/grav-admin /var/www/html && \
+  #  mv -T /var/www/grav-admin /var/www/html && \
+    cp -R /var/www/grav-admin /var/www/html && \
     rm grav-admin.zip
 
 # Return to root user
