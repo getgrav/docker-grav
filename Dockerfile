@@ -19,9 +19,10 @@ RUN set -ex; \
 	\
     pecl install apcu; \
     pecl install yaml; \
+	docker-php-ext-install apcu yaml; \
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
     docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/; \
-	docker-php-ext-install gd mysqli opcache zip ldap apcu yaml; \
+	docker-php-ext-install gd mysqli opcache zip ldap; \
 	\
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
 	apt-mark auto '.*' > /dev/null; \
