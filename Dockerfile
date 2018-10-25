@@ -1,20 +1,41 @@
 FROM php:7.2-apache
-LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)"
+LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)" \
+      maintainer="Romain Fluttaz <romain@fluttaz.fr>"
 
-# Enable Apache Rewrite + Expires Module
-RUN a2enmod rewrite expires
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
+# install the PHP extensions we need
+RUN set -ex; \
+	\
+	savedAptMark="$(apt-mark showmanual)"; \
+	\
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
         unzip \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
         libyaml-dev \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install zip
+        libldap2-dev \
+	; \
+	\
+    pecl install apcu; \
+    pecl install yaml; \
+	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+    docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/; \
+	docker-php-ext-install gd mysqli opcache zip ldap apcu yaml; \
+	\
+    # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
+	apt-mark auto '.*' > /dev/null; \
+	apt-mark manual $savedAptMark; \
+	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
+		| awk '/=>/ { print $3 }' \
+		| sort -u \
+		| xargs -r dpkg-query -S \
+		| cut -d: -f1 \
+		| sort -u \
+		| xargs -rt apt-mark manual; \
+	\
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	rm -rf /var/lib/apt/lists/*
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
@@ -29,12 +50,10 @@ RUN { \
 		echo 'post_max_size=128M'; \
 	} > /usr/local/etc/php/conf.d/php-recommended.ini
 
- # provide container inside image for data persistance
-# VOLUME /var/www/html
+# Enable Apache Rewrite + Expires Module
+RUN a2enmod rewrite expires
 
-RUN pecl install apcu \
-    && pecl install yaml \
-    && docker-php-ext-enable apcu yaml
+# VOLUME /var/www/html
 
 # Set user to www-data
 RUN chown www-data:www-data /var/www
