@@ -1,6 +1,8 @@
-# Official Docker Image for Grav
+# Docker Image for Grav
 
-This currently is pretty minimal and uses:
+_[Based on official grav docker image](https://github.com/getgrav/docker-grav)_
+
+Fonctionnalities :
 
 * apache-2.4.8
 * GD library
@@ -9,6 +11,7 @@ This currently is pretty minimal and uses:
 * php7.2-opcache
 * php7.2-acpu
 * php7.2-yaml
+* php7.2-ldap
 
 ## Building the image from Dockerfile
 
@@ -24,18 +27,4 @@ docker run -p 8000:80 grav:latest
 
 Point browser to `http://localhost/8000` and create user account...
 
-## Running local Grav installation
 
-This assumes you have already downloaded a Grav package into a local folder. This is the best way to run Grav if you want to have your changes persisted between restarts of the docker container.
-
-```
-docker run -v /local/grav/install:/var/www/html:cached -p 8000:80/tcp grav:latest
-```
-
-To run in the current directory you can use:
-
-```
-docker run -v `pwd`:/var/www/html:cached -p 8000:80/tcp grav:latest
-```
-
-Point browser to `http://localhost/8000` to access your Grav site
