@@ -2,6 +2,13 @@ FROM php:7.2-apache
 LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)" \
       maintainer="Romain Fluttaz <romain@fluttaz.fr>"
 
+# install dependencies we need
+RUN set -ex; \
+	\
+	apt-get update; \
+	apt-get install -y \
+        unzip
+
 # install the PHP extensions we need
 RUN set -ex; \
 	\
