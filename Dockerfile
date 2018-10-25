@@ -19,7 +19,7 @@ RUN set -ex; \
 	\
     pecl install apcu; \
     pecl install yaml; \
-	docker-php-ext-install apcu yaml; \
+	docker-php-ext-enable apcu yaml; \
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
     docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/; \
 	docker-php-ext-install gd mysqli opcache zip ldap; \
