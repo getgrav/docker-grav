@@ -2,6 +2,13 @@ FROM php:7.2-apache
 LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)" \
       maintainer="Romain Fluttaz <romain@fluttaz.fr>"
 
+# install dependencies we need
+RUN set -ex; \
+	\
+	apt-get update; \
+	apt-get install -y \
+        unzip
+
 # install the PHP extensions we need
 RUN set -ex; \
 	\
@@ -19,9 +26,10 @@ RUN set -ex; \
 	\
     pecl install apcu; \
     pecl install yaml; \
+	docker-php-ext-enable apcu yaml; \
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
     docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/; \
-	docker-php-ext-install gd mysqli opcache zip ldap apcu yaml; \
+	docker-php-ext-install gd mysqli opcache zip ldap; \
 	\
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
 	apt-mark auto '.*' > /dev/null; \
