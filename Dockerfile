@@ -73,8 +73,8 @@ VOLUME /var/www/html
 RUN chown -R www-data:www-data /var/www
 
 # Define Grav version and expected SHA1 signature
-ENV GRAV_VERSION 1.5.1
-ENV GRAV_SHA1 5292b05d304329beefeddffbf9f542916012c221
+ENV GRAV_VERSION 1.5.3
+ENV GRAV_SHA1 2265fd3624278922c009ca2907977d1ccc7a8253
 
 # Install grav
 RUN set -ex; \
