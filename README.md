@@ -22,7 +22,7 @@ docker build -t grav:latest .
 docker run -p 8000:80 grav:latest
 ```
 
-Point browser to `http://localhost/8000` and create user account...
+Point browser to `http://localhost:8000` and create user account...
 
 ## Running local Grav installation
 
@@ -38,4 +38,4 @@ To run in the current directory you can use:
 docker run -v `pwd`:/var/www/html:cached -p 8000:80/tcp grav:latest
 ```
 
-Point browser to `http://localhost/8000` to access your Grav site
+Point browser to `http://localhost:8000` to access your Grav site
