@@ -29,7 +29,7 @@ RUN { \
 		echo 'post_max_size=128M'; \
 	} > /usr/local/etc/php/conf.d/php-recommended.ini
 
- # provide container inside image for data persistance
+ # provide container inside image for data persistence
 # VOLUME /var/www/html
 
 RUN pecl install apcu \
