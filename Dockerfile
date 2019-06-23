@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.3-apache-stretch
 LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)"
 
 # Enable Apache Rewrite + Expires Module
@@ -41,8 +41,8 @@ RUN chown www-data:www-data /var/www
 USER www-data
 
 # Define Grav version and expected SHA1 signature
-ENV GRAV_VERSION 1.5.5
-ENV GRAV_SHA1 af0433facdae1afeb1d973a66db2315c5022b10d
+ENV GRAV_VERSION 1.6.11
+ENV GRAV_SHA1 5bad00e7884dd1792820e192433bfd1a17b1ec27
 
 # Install grav
 WORKDIR /var/www
