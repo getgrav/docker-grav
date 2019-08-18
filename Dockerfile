@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.3.8-apache
 LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)"
 
 # Enable Apache Rewrite + Expires Module
@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
         libyaml-dev \
+        libzip4 \
+        libzip-dev \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -33,7 +35,7 @@ RUN { \
 # VOLUME /var/www/html
 
 RUN pecl install apcu \
-    && pecl install yaml \
+    && pecl install yaml-2.0.4 \
     && docker-php-ext-enable apcu yaml
 
 # Set user to www-data
@@ -41,8 +43,8 @@ RUN chown www-data:www-data /var/www
 USER www-data
 
 # Define Grav version and expected SHA1 signature
-ENV GRAV_VERSION 1.5.5
-ENV GRAV_SHA1 af0433facdae1afeb1d973a66db2315c5022b10d
+ENV GRAV_VERSION 1.6.13
+ENV GRAV_SHA1 619e2e33f50ac707aca2aac6caa6a989adaa34e4
 
 # Install grav
 WORKDIR /var/www
