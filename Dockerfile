@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
         libyaml-dev \
+	libzip-dev \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -41,8 +42,8 @@ RUN chown www-data:www-data /var/www
 USER www-data
 
 # Define Grav version and expected SHA1 signature
-ENV GRAV_VERSION 1.5.5
-ENV GRAV_SHA1 af0433facdae1afeb1d973a66db2315c5022b10d
+ENV GRAV_VERSION 1.6.16
+ENV GRAV_SHA1 4fbb140fcf110c692a9d8102041c3f26b2fca9da
 
 # Install grav
 WORKDIR /var/www
