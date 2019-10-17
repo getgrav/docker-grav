@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
         libpng-dev \
         libyaml-dev \
 	libzip-dev \
+	cron \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -50,6 +51,9 @@ RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GR
     mv -T /var/www/grav-admin /var/www/html && \
     rm grav-admin.zip
 
+# Create cron job for Grav maintenance scripts
+RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
+
 # Return to root user
 USER root
 
@@ -61,3 +65,4 @@ VOLUME ["/var/www/html"]
 
 # ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["apache2-foreground"]
+CMD ["sh", "-c", "cron && apache2-foreground"]
