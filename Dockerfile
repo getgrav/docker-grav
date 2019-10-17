@@ -30,9 +30,6 @@ RUN { \
 		echo 'post_max_size=128M'; \
 	} > /usr/local/etc/php/conf.d/php-recommended.ini
 
- # provide container inside image for data persistance
-# VOLUME /var/www/html
-
 RUN pecl install apcu \
     && pecl install yaml \
     && docker-php-ext-enable apcu yaml
@@ -58,6 +55,9 @@ USER root
 
 # Copy init scripts
 # COPY docker-entrypoint.sh /entrypoint.sh
+
+# provide container inside image for data persistance
+VOLUME ["/var/www/html"]
 
 # ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["apache2-foreground"]
