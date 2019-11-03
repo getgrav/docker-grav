@@ -5,7 +5,7 @@ LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)"
 RUN a2enmod rewrite expires
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         unzip \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip
+    && rm -rf /var/lib/apt/lists/*
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
