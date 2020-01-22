@@ -13,9 +13,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libyaml-dev \
     libzip4 \
     libzip-dev \
+    zlib1g-dev \
+	  libicu-dev \
+	  g++ \
+	  git \
 	  cron \
 	  vim \
     && docker-php-ext-install opcache \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip
@@ -32,6 +38,7 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 		echo 'upload_max_filesize=128M'; \
 		echo 'post_max_size=128M'; \
+		echo 'extension=intl.so'; \
 	} > /usr/local/etc/php/conf.d/php-recommended.ini
 
 RUN pecl install apcu \
