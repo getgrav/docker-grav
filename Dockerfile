@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.3-apache
 LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)"
 
 # Enable Apache Rewrite + Expires Module
@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
         libyaml-dev \
+	libzip-dev \
+	cron \
+	vim \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -29,9 +32,6 @@ RUN { \
 		echo 'post_max_size=128M'; \
 	} > /usr/local/etc/php/conf.d/php-recommended.ini
 
- # provide container inside image for data persistance
-# VOLUME /var/www/html
-
 RUN pecl install apcu \
     && pecl install yaml \
     && docker-php-ext-enable apcu yaml
@@ -41,8 +41,8 @@ RUN chown www-data:www-data /var/www
 USER www-data
 
 # Define Grav version and expected SHA1 signature
-ENV GRAV_VERSION 1.5.5
-ENV GRAV_SHA1 af0433facdae1afeb1d973a66db2315c5022b10d
+ENV GRAV_VERSION 1.6.16
+ENV GRAV_SHA1 4fbb140fcf110c692a9d8102041c3f26b2fca9da
 
 # Install grav
 WORKDIR /var/www
@@ -52,11 +52,18 @@ RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GR
     mv -T /var/www/grav-admin /var/www/html && \
     rm grav-admin.zip
 
+# Create cron job for Grav maintenance scripts
+RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
+
 # Return to root user
 USER root
 
 # Copy init scripts
 # COPY docker-entrypoint.sh /entrypoint.sh
 
+# provide container inside image for data persistance
+VOLUME ["/var/www/html"]
+
 # ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["apache2-foreground"]
+CMD ["sh", "-c", "cron && apache2-foreground"]
