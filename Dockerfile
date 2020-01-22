@@ -14,11 +14,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libzip4 \
     libzip-dev \
     zlib1g-dev \
-	  libicu-dev \
-	  g++ \
-	  git \
-	  cron \
-	  vim \
+    libicu-dev \
+    g++ \
+    git \
+    cron \
+    vim \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
