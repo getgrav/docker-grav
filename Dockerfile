@@ -41,8 +41,8 @@ RUN chown www-data:www-data /var/www
 USER www-data
 
 # Define Grav version and expected SHA1 signature
-ENV GRAV_VERSION 1.6.15
-ENV GRAV_SHA1 ac2a5dff69c4171aea7a0412420aac439f80dd14
+ENV GRAV_VERSION 1.6.16
+ENV GRAV_SHA1 4fbb140fcf110c692a9d8102041c3f26b2fca9da
 
 # Install grav
 WORKDIR /var/www
