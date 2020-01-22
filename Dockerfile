@@ -6,14 +6,15 @@ RUN a2enmod rewrite expires
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        unzip \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libpng-dev \
-        libyaml-dev \
-	libzip-dev \
-	cron \
-	vim \
+    unzip \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libyaml-dev \
+    libzip4 \
+    libzip-dev \
+	  cron \
+	  vim \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -34,7 +35,7 @@ RUN { \
 	} > /usr/local/etc/php/conf.d/php-recommended.ini
 
 RUN pecl install apcu \
-    && pecl install yaml \
+    && pecl install yaml-2.0.4 \
     && docker-php-ext-enable apcu yaml
 
 # Set user to www-data
@@ -44,7 +45,6 @@ USER www-data
 # Define Grav version and expected SHA1 signature
 ENV GRAV_VERSION 1.6.19
 ENV GRAV_SHA1 231e6789e9575adccd6044aa0d0c72b8c2603a96
-
 
 # Install grav
 WORKDIR /var/www
