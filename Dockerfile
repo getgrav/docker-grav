@@ -30,15 +30,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
-		echo 'opcache.memory_consumption=128'; \
-		echo 'opcache.interned_strings_buffer=8'; \
-		echo 'opcache.max_accelerated_files=4000'; \
-		echo 'opcache.revalidate_freq=2'; \
-		echo 'opcache.fast_shutdown=1'; \
-		echo 'opcache.enable_cli=1'; \
-		echo 'upload_max_filesize=128M'; \
-		echo 'post_max_size=128M'; \
-	} > /usr/local/etc/php/conf.d/php-recommended.ini
+    echo 'opcache.memory_consumption=128'; \
+    echo 'opcache.interned_strings_buffer=8'; \
+    echo 'opcache.max_accelerated_files=4000'; \
+    echo 'opcache.revalidate_freq=2'; \
+    echo 'opcache.fast_shutdown=1'; \
+    echo 'opcache.enable_cli=1'; \
+    echo 'upload_max_filesize=128M'; \
+    echo 'post_max_size=128M'; \
+    } > /usr/local/etc/php/conf.d/php-recommended.ini
 
 RUN pecl install apcu \
     && pecl install yaml-2.0.4 \
@@ -48,14 +48,12 @@ RUN pecl install apcu \
 RUN chown www-data:www-data /var/www
 USER www-data
 
-# Define Grav version and expected SHA1 signature
-ENV GRAV_VERSION 1.6.19
-ENV GRAV_SHA1 231e6789e9575adccd6044aa0d0c72b8c2603a96
+# Define Grav specifi version of Grav or use latest stable
+ENV GRAV_VERSION latest
 
 # Install grav
 WORKDIR /var/www
 RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GRAV_VERSION} && \
-    echo "$GRAV_SHA1 grav-admin.zip" | sha1sum -c - && \
     unzip grav-admin.zip && \
     mv -T /var/www/grav-admin /var/www/html && \
     rm grav-admin.zip
