@@ -38,7 +38,6 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 		echo 'upload_max_filesize=128M'; \
 		echo 'post_max_size=128M'; \
-		echo 'extension=intl.so'; \
 	} > /usr/local/etc/php/conf.d/php-recommended.ini
 
 RUN pecl install apcu \
