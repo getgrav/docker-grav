@@ -48,7 +48,7 @@ RUN pecl install apcu \
 RUN chown www-data:www-data /var/www
 USER www-data
 
-# Define Grav specifi version of Grav or use latest stable
+# Define Grav specific version of Grav or use latest stable
 ENV GRAV_VERSION latest
 
 # Install grav
