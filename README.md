@@ -29,5 +29,5 @@ Point browser to `http://localhost:8000` and create user account...
 ## Running Grav Image with Latest Grav + Admin with a named volume (can be used in production)
 
 ```
-docker run -d -p 8000:80 --name grav --restart always -v grav_data:/var/www/html grav:1.0
+docker run -d -p 8000:80 --restart always -v grav_data:/var/www/html grav:latest
 ```
