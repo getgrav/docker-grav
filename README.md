@@ -2,15 +2,13 @@
 
 This currently is pretty minimal and uses:
 
-* apache-2.4.38
+* Apache httpd 2.4
+* BusyBox
 * GD library
-* Unzip library
 * php7.3
 * php7.3-opcache
 * php7.3-acpu
 * php7.3-yaml
-* cron
-* vim editor
 
 ## Persisting data
 
