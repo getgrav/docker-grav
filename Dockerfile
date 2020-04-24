@@ -2,7 +2,9 @@ FROM php:7.3-apache
 LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)"
 
 # Enable Apache Rewrite + Expires Module
-RUN a2enmod rewrite expires
+RUN a2enmod rewrite expires && \
+    sed -i 's/ServerTokens OS/ServerTokens ProductOnly/g' \
+    /etc/apache2/conf-available/security.conf
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -38,6 +40,7 @@ RUN { \
     echo 'opcache.enable_cli=1'; \
     echo 'upload_max_filesize=128M'; \
     echo 'post_max_size=128M'; \
+    echo 'expose_php=off'; \
     } > /usr/local/etc/php/conf.d/php-recommended.ini
 
 RUN pecl install apcu \
