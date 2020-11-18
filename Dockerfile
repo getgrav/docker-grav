@@ -75,16 +75,26 @@ RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav sc
 
 # Some folders will always be updated (e.g. logs) by Grav app, so they can be ignored from the Git repo
 RUN { \
-    echo '### Folders that need to exist but their contents are written by the server on the fly' \
-    echo '# Assets' \
-    echo 'assets/*' \
-    echo '!assets/.gitkeep' \
-    echo '# Images' \
-    echo 'images/*' \
-    echo '!images/.gitkeep' \
-    echo '# Logs' \
-    echo 'logs/*' \
-    echo '!logs/.gitkeep' \
+    echo '### Folders that need to exist but their contents are written by the server on the fly'; \
+    echo '# Assets'; \
+    echo 'assets/*'; \
+    echo '!assets/.gitkeep'; \
+    echo '# Images'; \
+    echo 'images/*'; \
+    echo '!images/.gitkeep'; \
+    echo '# Logs'; \
+    echo 'logs/*'; \
+    echo '!logs/.gitkeep'; \
+    echo '# User data'; \
+    echo 'user/data/*'; \
+    echo '!user/data/.gitkeep'; \
+    echo '###'; \
+    echo ''; \
+    echo '# Ignore these completely'; \
+    echo 'backup'; \
+    echo 'cache'; \
+    echo 'logs'; \
+    echo 'tmp'; \
     } > /var/www/html/.gitignore
 
 # Return to root user
