@@ -45,6 +45,7 @@ RUN { \
 
 # Additional, performance related configs
 RUN { \
+    echo 'memory_limit=2G; This sets the maximum amount of memory in bytes that a script is allowed to allocate. Set a high value for Dev envs or for Prod envs that use more than 1-2 background jobs. In today\'s real life, production apps should set this to at least 512M for medium to large websites.'; \
     echo 'opcache.enable_file_override=1; When enabled, the opcode cache will be checked for whether a file has already been cached when file_exists(), is_file() and is_readable() are called. This may increase performance in applications that check the existence and readability of PHP scripts, but risks returning stale data if opcache.validate_timestamps is disabled.'; \
     echo 'opcache.validate_timestamps=1; If enabled, OPcache will check for updated scripts every opcache.revalidate_freq seconds. When this directive is disabled, you must reset OPcache manually via opcache_reset(), opcache_invalidate() or by restarting the Web server for changes to the filesystem to take effect.'; \
     echo 'opcache.revalidate_path=1; If disabled, existing cached files using the same include_path will be reused. Thus, if a file with the same name is elsewhere in the include_path, it will not be found.'; \
@@ -54,7 +55,7 @@ RUN { \
 
 RUN pecl install apcu \
     && pecl install yaml-2.0.4 \
-    && docker-php-ext-enable apcu yaml
+    && docker-php-ext-enable apcu yaml gd
 
 # Set user to www-data
 RUN chown www-data:www-data /var/www
