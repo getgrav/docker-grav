@@ -1,3 +1,4 @@
+This uses the official image of Grav CMS (https://getgrav.org) with some additional configs so that it makes sense to use on a Production server.
 # Official Docker Image for Grav
 
 This currently is pretty minimal and uses:
