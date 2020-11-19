@@ -19,7 +19,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libmemcachedutil2 \
     build-essential \
     libmemcached-dev \
-    libwebp-dev \
     g++ \
     git \
     cron \
@@ -27,7 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd openssl exif fileinfo \
     && docker-php-ext-install zip \
     && rm -rf /var/lib/apt/lists/*
