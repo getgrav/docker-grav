@@ -1,9 +1,9 @@
 This uses the official image of Grav CMS (https://getgrav.org) with some additional configs so that it makes sense to use on a Production server.
 # Official Docker Image for Grav
 
-This currently is pretty minimal and uses:
+This currently is uses the latest versions of:
 
-* apache-2.4.38
+* apache
 * GD library
 * Unzip library
 * php7.4
