@@ -78,4 +78,4 @@ VOLUME ["/var/www/html"]
 
 # ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["apache2-foreground"]
-CMD ["sh", "-c", "cron && apache2-foreground"]
+CMD ["sh", "-c", "apache2-foreground"]
