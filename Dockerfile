@@ -41,7 +41,7 @@ RUN curl --silent --show-error https://getcomposer.org/installer | php -- --inst
 
 RUN pecl install apcu \
     && pecl install yaml-2.1.0 \
-    && docker-php-ext-enable apcu yaml
+    && docker-php-ext-enable apcu yaml gd openssl fileinfo opcache intl zip
 
 # Set user to www-data
 RUN chown www-data:www-data /var/www
