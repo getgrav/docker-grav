@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install -j$(nproc) gd imap openssl exif fileinfo \
+    && docker-php-ext-install -j$(nproc) gd openssl exif fileinfo \
     && docker-php-ext-install zip \
     && rm -rf /var/lib/apt/lists/*
 
