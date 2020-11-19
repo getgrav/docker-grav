@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libmemcachedutil2 \
     build-essential \
     libmemcached-dev \
+    libwebp \
     g++ \
     git \
     cron \
