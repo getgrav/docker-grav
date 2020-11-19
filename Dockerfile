@@ -1,10 +1,8 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.4-fpm
 LABEL maintainer="Andrei Condurachi <andrei@condurachi.ro> (@acondura)"
 
-# Enable Apache Rewrite + Expires Module
-RUN a2enmod rewrite expires && \
-    sed -i 's/ServerTokens OS/ServerTokens ProductOnly/g' \
-    /etc/apache2/conf-available/security.conf
+# Ubuntu repo updates
+RUN apt-get update
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -17,6 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libzip-dev \
     zlib1g-dev \
     libicu-dev \
+    libmemcached11 \
+    libmemcachedutil2 \
+    build-essential \
+    libmemcached-dev \
     g++ \
     git \
     cron \
@@ -24,24 +26,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) gd imap openssl exif fileinfo \
     && docker-php-ext-install zip \
     && rm -rf /var/lib/apt/lists/*
 
-# set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
-RUN { \
-    echo 'opcache.memory_consumption=128'; \
-    echo 'opcache.interned_strings_buffer=8'; \
-    echo 'opcache.max_accelerated_files=4000'; \
-    echo 'opcache.revalidate_freq=2'; \
-    echo 'opcache.fast_shutdown=1'; \
-    echo 'opcache.enable_cli=1'; \
-    echo 'upload_max_filesize=128M'; \
-    echo 'post_max_size=128M'; \
-    echo 'expose_php=off'; \
-    } > /usr/local/etc/php/conf.d/php-recommended.ini
+# Enable Apache Rewrite + Expires Module
+RUN a2enmod rewrite expires && \
+    sed -i 's/ServerTokens OS/ServerTokens ProductOnly/g' \
+    /etc/apache2/conf-available/security.conf
+
+# Install composer
+RUN curl --silent --show-error https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN pecl install apcu \
     && pecl install yaml-2.1.0 \
@@ -70,12 +66,7 @@ EXPOSE 80/tcp
 # Return to root user
 USER root
 
-# Copy init scripts
-# COPY docker-entrypoint.sh /entrypoint.sh
-
 # provide container inside image for data persistence
 VOLUME ["/var/www/html"]
 
-# ENTRYPOINT ["/entrypoint.sh"]
-# CMD ["apache2-foreground"]
 CMD ["sh", "-c", "apache2-foreground"]
