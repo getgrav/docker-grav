@@ -1,11 +1,12 @@
 FROM php:7.4-fpm
-LABEL maintainer="Andrei Condurachi <andrei@condurachi.ro> (@acondura)"
 
 # Ubuntu repo updates
 RUN apt-get update
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+    apache2 \
     unzip \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
