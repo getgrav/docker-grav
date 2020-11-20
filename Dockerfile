@@ -31,9 +31,6 @@ RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /e
 
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
-ENV APACHE_UID  100
-ENV APACHE_GID  101
-
 # Define Grav specific version of Grav or use latest stable
 ENV GRAV_VERSION latest
 
@@ -56,7 +53,7 @@ USER root
 # provide container inside image for data persistence
 VOLUME ["/var/www"]
 
-COPY        run.sh     /run.sh
-RUN         chmod u+x  /run.sh
+COPY run.sh     /run.sh
+RUN chmod u+x  /run.sh
 
-CMD         ["/run.sh"]
+CMD ["/run.sh"]
