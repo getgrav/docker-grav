@@ -6,7 +6,7 @@ RUN apk update && \
     rm -rf /var/cache/apk/* /var/log/*
 
 # Install packages
-RUN apk add apache2 apache2-proxy composer zip curl
+RUN apk add apache2 apache2-proxy shadow composer zip curl
 
 # Configure to use php fpm and don't use /var/www to store everything (modules and logs)
 RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /etc/apache2/httpd.conf && \
