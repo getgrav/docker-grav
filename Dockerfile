@@ -6,7 +6,7 @@ RUN apk update && \
     rm -rf /var/cache/apk/* /var/log/*
 
 # Install packages
-RUN apk add apache2 apache2-proxy shadow composer zip curl gd php7-pecl-yaml php7-pecl-memcached php7-gd php7-zip
+RUN apk add apache2 apache2-proxy shadow composer zip curl gd php7-pecl-yaml php7-pecl-memcached php7-gd php7-zip vim
 
 # Configure to use php fpm and don't use /var/www to store everything (modules and logs)
 RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /etc/apache2/httpd.conf && \
@@ -16,20 +16,11 @@ RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /e
     sed -i 's/LoadModule lbmethod/#LoadModule lbmethod/g' /etc/apache2/conf.d/proxy.conf && \
     # Enable deflate
     sed -i 's/#LoadModule deflate_module/LoadModule deflate_module/g' /etc/apache2/httpd.conf && \
-    # change ServerRoot
-    sed -i 's/var\/www\/localhost\/htdocs/var\/www/g' /etc/apache2/httpd.conf && \
-    sed -i 's/ServerRoot \/var\/www/ServerRoot \/usr\/local\/apache/g' /etc/apache2/httpd.conf && \
-    # change user and group
-    sed -i 's/^User apache/User www-data/g' /etc/apache2/httpd.conf && \
-    sed -i 's/^Group apache/Group www-data/g' /etc/apache2/httpd.conf && \
-    # Prepare env and create user
+    # Prepare env
     mkdir -p /var/log/apache2 && \
     chown www-data:www-data /var/log/apache2 /var/www && \
     # Clean base directory and create required ones
-    rm -rf /var/www/* && \
-    mkdir -p /usr/local/apache && \
-    ln -s /usr/lib/apache2 /usr/local/apache/modules && \
-    ln -s /var/log/apache2 /usr/local/apache/logs
+    rm -rf /var/www/*
 
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
