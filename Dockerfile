@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd openssl exif fileinfo \
+    && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip \
     && rm -rf /var/lib/apt/lists/*
 
@@ -42,7 +42,7 @@ RUN curl --silent --show-error https://getcomposer.org/installer | php -- --inst
 
 RUN pecl install apcu \
     && pecl install yaml-2.1.0 \
-    && docker-php-ext-enable apcu yaml gd openssl fileinfo opcache intl zip
+    && docker-php-ext-enable apcu yaml gd opcache intl zip
 
 # Set user to www-data
 RUN chown www-data:www-data /var/www
