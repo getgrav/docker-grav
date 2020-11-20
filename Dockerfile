@@ -6,7 +6,7 @@ RUN apk update && \
     rm -rf /var/cache/apk/* /var/log/*
 
 # Install packages
-RUN apk add apache2 apache2-proxy shadow composer zip curl gd php7-pecl-yaml php7-pecl-memcached php7-gd php7-zip vim
+RUN apk add --no-cache bash ca-certificates apache2 apache2-proxy shadow composer zip curl gd php7-pecl-yaml php7-pecl-memcached php7-gd php7-zip vim
 
 # Configure to use php fpm and don't use /var/www to store everything (modules and logs)
 RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /etc/apache2/httpd.conf && \
@@ -21,7 +21,7 @@ RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /e
     sed -i 's/expose_php = On/expose_php = Off/g' /etc/php7/php.ini && \
     # Prepare env
     mkdir -p /var/log/apache2 && \
-    chown www-data:www-data /var/log/apache2 /var/www && \
+    chown -R www-data:www-data /var/log/apache2 /var/www && \
     # Clean base directory and create required ones
     rm -rf /var/www/*
 
