@@ -55,7 +55,7 @@ ENV GRAV_VERSION latest
 WORKDIR /var/www
 RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GRAV_VERSION} && \
     unzip grav-admin.zip && \
-    mv -T /var/www/grav-admin /var/www/html && \
+    mv -f /var/www/grav-admin /var/www/html && \
     rm grav-admin.zip
 
 # Create cron job for Grav maintenance scripts
