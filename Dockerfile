@@ -21,15 +21,10 @@ RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /e
     sed -i 's/expose_php = On/expose_php = Off/g' /etc/php7/php.ini && \
     # Prepare env
     mkdir -p /var/log/apache2 && \
-    chown -R www-data:www-data /var/log/apache2 /var/www && \
     # Clean base directory and create required ones
     rm -rf /var/www/*
 
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
-
-# Set user to www-data
-RUN chown www-data:www-data /var/www
-USER www-data
 
 # Define Grav specific version of Grav or use latest stable
 ENV GRAV_VERSION latest
@@ -44,6 +39,8 @@ RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GR
 # Create cron job for Grav maintenance scripts
 RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
 
+RUN chown -R www-data:www-data /var/log/apache2 /var/www
+
 # Accept incoming HTTP requests
 EXPOSE 80/tcp
 
@@ -56,4 +53,4 @@ VOLUME ["/var/www"]
 COPY run.sh     /run.sh
 RUN chmod u+x  /run.sh
 
-CMD ["/run.sh"]
+CMD ["sh", "-c", "php-fpm -F && service httpd start"]
