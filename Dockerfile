@@ -6,7 +6,7 @@ RUN apk update && \
     rm -rf /var/cache/apk/* /var/log/*
 
 # Install packages
-RUN apk add --no-cache bash ca-certificates apache2 apache2-proxy shadow composer zip curl gd php7-pecl-yaml php7-pecl-memcached php7-gd php7-zip vim
+RUN apk add --no-cache bash ca-certificates apache2 apache2-proxy shadow composer zip curl gd php7-pecl-yaml php7-pecl-memcached php7-gd php7-zip vim php7-ctype php7-curl php7-dom php7-json php7-mbstring php7-openssl php7-session php7-simplexml php7-xml php7-apcu php7-opcache php7-xdebug
 
 # Configure to use php fpm and don't use /var/www to store everything (modules and logs)
 RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /etc/apache2/httpd.conf && \
