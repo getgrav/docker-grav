@@ -22,13 +22,10 @@ RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /e
     sed -i 's/^Group apache/Group www-data/g' /etc/apache2/httpd.conf && \
     # Prepare env and create user
     mkdir -p /var/log/apache2 && \
-    groupdel www-data && \
-    groupmod -g 101 -n www-data apache && \
-    usermod  -g 101 -u 100 -l www-data -d /var/www apache && \
     chown www-data:www-data /var/log/apache2 /var/www && \
     # Clean base directory and create required ones
     rm -rf /var/www/* && \
-    mkdir -p /run/apache2 /usr/local/apache && \
+    mkdir -p /usr/local/apache && \
     ln -s /usr/lib/apache2 /usr/local/apache/modules && \
     ln -s /var/log/apache2 /usr/local/apache/logs
 
