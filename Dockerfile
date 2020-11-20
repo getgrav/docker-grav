@@ -24,6 +24,8 @@ RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /e
 
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
+USER www-data
+
 # Define Grav specific version of Grav or use latest stable
 ENV GRAV_VERSION latest
 
