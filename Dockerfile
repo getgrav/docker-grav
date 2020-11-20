@@ -1,4 +1,4 @@
-FROM alpine
+FROM php:7.4-fpm-alpine
 
 # Initial updates
 RUN apk update && \
