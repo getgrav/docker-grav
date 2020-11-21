@@ -28,8 +28,10 @@ RUN apk add --no-cache \
     php7-session \
     php7-simplexml \
     php7-soap \
+    php7-tokenizer \
     php7-xdebug \
     php7-xml \
+    php7-xmlwriter \
     php7-pecl-yaml \
     php7-zip \
     composer \
@@ -43,21 +45,27 @@ RUN apk add --no-cache \
 RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /etc/apache2/httpd.conf && \
     sed -i 's/#LoadModule mpm_event_module/LoadModule mpm_event_module/g' /etc/apache2/httpd.conf && \
     sed -i 's/#LoadModule rewrite_module/LoadModule rewrite_module/g' /etc/apache2/httpd.conf && \
-    # remove useless module bundled with proxy
+    # Remove useless module bundled with proxy
     sed -i 's/LoadModule lbmethod/#LoadModule lbmethod/g' /etc/apache2/conf.d/proxy.conf && \
     # Enable deflate
     sed -i 's/#LoadModule deflate_module/LoadModule deflate_module/g' /etc/apache2/httpd.conf && \
     # Disable some configs
     sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php7/php.ini && \
     sed -i 's/expose_php = On/expose_php = Off/g' /etc/php7/php.ini && \
+    # Change DocumentRoot
+    sed -i 's/var\/www\/localhost\/htdocs/var\/www\/html/g' /etc/apache2/httpd.conf && \
+    # Change ServerRoot
+    sed -i 's/ServerRoot \/var\/www/ServerRoot \/usr\/local\/apache/g' /etc/apache2/httpd.conf && \
     # Prepare env
     mkdir -p /var/log/apache2 && \
     # Clean base directory and create required ones
     rm -rf /var/www/* && \
-    mkdir -p /run/apache2 /usr/local/apache && \
+    # Apache configs in one place
+    mkdir -p /usr/local/apache && \
     ln -s /usr/lib/apache2 /usr/local/apache/modules && \
     ln -s /var/log/apache2 /usr/local/apache/logs
 
+# PHP-FPM config
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
 # Define Grav specific version of Grav or use latest stable
