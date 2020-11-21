@@ -57,8 +57,8 @@ RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /e
     # Change ServerRoot
     sed -i 's/ServerRoot \/var\/www/ServerRoot \/usr\/local\/apache/g' /etc/apache2/httpd.conf && \
     # Make sure PHP-FPM executes as apache user
-    sed -i 's/user = nobody/user = apache/g' /etc/apache2/httpd.conf && \
-    sed -i 's/group = nobody/group = apache/g' /etc/apache2/httpd.conf && \
+    sed -i 's/user = nobody/user = apache/g' /etc/php7/php-fpm.d/www.conf && \
+    sed -i 's/group = nobody/group = apache/g' /etc/php7/php-fpm.d/www.conf && \
     # Prepare env
     mkdir -p /var/log/apache2 && \
     # Clean base directory and create required ones
