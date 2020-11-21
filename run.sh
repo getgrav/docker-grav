@@ -3,6 +3,10 @@
 # syslog option '-Z' was changed to '-t', change this in /etc/conf.d/syslog so that syslog (and then cron) actually starts
 # https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
 exec sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
+# Start the kernel log deamon
+exec service klogd start
+# Start the cron deamon
+exec service crond start
 
 # Create cron job for Grav maintenance scripts
 (crontab -l; echo "* * * * * cd /var/www/html;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
