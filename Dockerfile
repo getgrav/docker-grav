@@ -42,6 +42,10 @@ RUN apk add --no-cache \
     vim \
     shadow
 
+# syslog option '-Z' was changed to '-t', change this in /etc/conf.d/syslog so that syslog (and then cron) actually starts
+# https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
+RUN sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
+
 # Configure to use php fpm and don't use /var/www to store everything (modules and logs)
 RUN \
     # Disable mpm_prefork
