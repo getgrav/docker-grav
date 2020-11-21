@@ -16,7 +16,6 @@ exec service crond start
 # Start Apache, PHP-FPM and Cron
 exec /usr/sbin/httpd -D FOREGROUND -f /etc/apache2/httpd.conf &
 exec /usr/sbin/php-fpm7 -F
-exec crond
 
 # Make sure apache can read&right to logs and docroot
 RUN chown -R apache:apache /var/log/apache2 /var/www
