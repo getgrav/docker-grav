@@ -1,5 +1,5 @@
 #!/bin/sh
 
 # Start PHP-FPM and Apache
-php-fpm
-service httpd start
+exec /usr/sbin/httpd -D FOREGROUND -f /etc/apache2/httpd.conf &
+exec /usr/sbin/php-fpm7 -F
