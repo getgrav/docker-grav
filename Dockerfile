@@ -97,6 +97,9 @@ RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GR
     mv -f /var/www/grav-admin /var/www/html && \
     rm grav-admin.zip
 
+# Update Grav plugins
+RUN cd /var/www/html && bin/gpm -y update
+
 # Accept incoming HTTP requests
 EXPOSE 80
 
