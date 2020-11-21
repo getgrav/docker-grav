@@ -7,6 +7,7 @@ RUN apk update && \
 
 # Install packages
 RUN apk add --no-cache \
+    apache2 \
     apache2-proxy \
     php7-fpm \
     php7 \
@@ -72,7 +73,7 @@ RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GR
 # Create cron job for Grav maintenance scripts
 RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
 
-RUN chown -R www-data:www-data /var/log/apache2 /var/www
+RUN chown -R apache:apache /var/log/apache2 /var/www
 
 # Accept incoming HTTP requests
 EXPOSE 80
