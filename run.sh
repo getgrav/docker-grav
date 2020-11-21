@@ -17,3 +17,6 @@ service crond start
 service httpd start
 # Start PHP-FPM
 service php-fpm7 start
+
+# Make sure apache can read&right to logs and docroot
+chown -R apache:apache /var/log/apache2 /var/www
