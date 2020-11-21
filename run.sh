@@ -5,6 +5,6 @@
 # Cron requires that each entry in a crontab end in a newline character. If the last entry in a crontab is missing the newline, cron will consider the crontab (at least partially) broken and refuse to install it.
 (crontab -l; echo "") | crontab -
 
-# Start PHP-FPM and Apache
+# Start Apache and PHP-FPM
 exec /usr/sbin/httpd -D FOREGROUND -f /etc/apache2/httpd.conf &
 exec /usr/sbin/php-fpm7 -F

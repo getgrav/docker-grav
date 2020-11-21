@@ -9,6 +9,7 @@ RUN apk update && \
 RUN apk add --no-cache \
     apache2 \
     apache2-proxy \
+    # PHP-FPM (FastCGI Process Manager) is an alternative PHP FastCGI implementation with some additional features useful for sites of any size, especially busier sites - https://php-fpm.org
     php7-fpm \
     php7 \
     php7-apcu \
