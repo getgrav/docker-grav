@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:latest
 
 # Initial updates
 RUN apk update && \
