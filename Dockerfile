@@ -68,6 +68,11 @@ RUN sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /e
 # PHP-FPM config
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
+# Make sure apache can read&right to logs and docroot
+RUN chown -R apache:apache /var/log/apache2 /var/www
+### Execute as Apache user ###
+USER apache
+
 # Define Grav specific version of Grav or use latest stable
 ENV GRAV_VERSION latest
 
@@ -81,15 +86,13 @@ RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GR
 # Create cron job for Grav maintenance scripts
 RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
 
-RUN chown -R apache:apache /var/log/apache2 /var/www
-
 # Accept incoming HTTP requests
 EXPOSE 80
 
-# Return to root user
+### Return to root user ###
 USER root
 
-# provide container inside image for data persistence
+# Provide container inside image for data persistence
 VOLUME ["/var/www"]
 
 COPY run.sh /run.sh
