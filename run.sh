@@ -8,3 +8,6 @@
 # Start Apache and PHP-FPM
 exec /usr/sbin/httpd -D FOREGROUND -f /etc/apache2/httpd.conf &
 exec /usr/sbin/php-fpm7 -F
+
+# Make sure apache can read&right to logs and docroot
+RUN chown -R apache:apache /var/log/apache2 /var/www
