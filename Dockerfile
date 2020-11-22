@@ -7,6 +7,11 @@ RUN apk update && \
 
 # Install packages
 RUN apk add --no-cache \
+    # Init related
+    tini \
+    openrc \
+    busybox-initscripts \
+    # Apache
     apache2 \
     apache2-proxy \
     # PHP-FPM (FastCGI Process Manager) is an alternative PHP FastCGI implementation with some additional features useful for sites of any size, especially busier sites - https://php-fpm.org
@@ -62,6 +67,8 @@ RUN \
     sed -i 's/expose_php = On/expose_php = Off/g' /etc/php7/php.ini && \
     # Disable APC - it has been replaced by APCu and opcache in PHP7 - https://pecl.php.net/package/apc
     echo 'apc.enabled = Off' >> /etc/php7/php.ini && \
+    # Increase memory_limit
+    sed -i 's/memory_limit.*/memory_limit = 512M/g' /etc/php7/php.ini && \
     # Change DocumentRoot to /var/www
     sed -i 's/var\/www\/localhost\/htdocs/var\/www\/html/g' /etc/apache2/httpd.conf && \
     # Change ServerRoot to /usr/local/apache
@@ -82,9 +89,6 @@ RUN \
 RUN chown -R apache:apache /var/www
 # Make sure apache can read&right to logs
 RUN chown -R apache:apache /var/log/apache2
-
-# PHP-FPM vhost config
-COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
 ### Continue execution as Apache user ###
 USER apache
@@ -108,10 +112,29 @@ EXPOSE 80
 ### Return to root user ###
 USER root
 
+# syslog option '-Z' was changed to '-t', change this in /etc/conf.d/syslog so that syslog (and then cron) actually starts
+# https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
+RUN sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
+
+# PHP-FPM vhost config
+COPY /config/vhost.conf /etc/apache2/conf.d/vhost.conf
+
+# Start Apache by default
+RUN rc-update add httpd default
+# default PHP-FPM by default
+RUN rc-update add php-fpm7 default
+
+# Create cron job for Grav maintenance scripts
+RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
+# Cron requires that each entry in a crontab end in a newline character. If the last entry in a crontab is missing the newline, cron will consider the crontab (at least partially) broken and refuse to install it.
+RUN (crontab -l; echo "") | crontab -
+
+# Make sure apache can read&right to docroot
+RUN chown -R apache:apache /var/www
+# Make sure apache can read&right to logs
+RUN chown -R apache:apache /var/log/apache2
+# Allow apache user login
+RUN sed -i 's/apache(.*)\/sbin\/nologin/apache\1\/bin\/ash/g' /etc/passwd
+
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
-
-COPY run.sh /run.sh
-RUN chmod u+x /run.sh
-
-CMD ["/run.sh"]
