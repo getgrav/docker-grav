@@ -69,8 +69,6 @@ RUN \
     # Make sure PHP-FPM executes as apache user
     sed -i 's/user = nobody/user = apache/g' /etc/php7/php-fpm.d/www.conf && \
     sed -i 's/group = nobody/group = apache/g' /etc/php7/php-fpm.d/www.conf && \
-    # Allow apache user login
-    sed -i 's/apache(.*)\/sbin\/nologin/apache\1\/bin\/ash/g' /etc/passwd && \
     # Prepare Apache log dir
     mkdir -p /var/log/apache2 && \
     # Clean base directory
