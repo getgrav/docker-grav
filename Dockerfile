@@ -78,13 +78,13 @@ RUN \
     ln -s /usr/lib/apache2 /usr/local/apache/modules && \
     ln -s /var/log/apache2 /usr/local/apache/logs
 
-# PHP-FPM vhost config
-COPY vhost.conf /etc/apache2/conf.d/vhost.conf
-
 # Make sure apache can read&right to docroot
 RUN chown -R apache:apache /var/www
 # Make sure apache can read&right to logs
 RUN chown -R apache:apache /var/log/apache2
+
+# PHP-FPM vhost config
+COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
 ### Continue execution as Apache user ###
 USER apache

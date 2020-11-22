@@ -13,7 +13,7 @@ rc-service syslog restart
 # Restart the kernel log deamon
 rc-service klogd restart
 
-# Start the cron deamon by default
+# Start cron by default
 rc-update add crond default && rc-service crond start
 # Start Apache by default
 rc-update add httpd default && rc-service httpd start
