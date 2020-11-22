@@ -81,8 +81,10 @@ RUN \
 # PHP-FPM vhost config
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
-# Make sure apache can read&right to logs and docroot
-RUN chown -R apache:apache /var/log/apache2 /var/www
+# Make sure apache can read&right to docroot
+RUN chown -R apache:apache /var/www
+# Make sure apache can read&right to logs
+RUN chown -R apache:apache /var/log/apache2
 
 ### Continue execution as Apache user ###
 USER apache
