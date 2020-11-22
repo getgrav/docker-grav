@@ -18,5 +18,5 @@ service httpd start
 # Start PHP-FPM
 service php-fpm7 start
 
-# Make sure apache can read&right to logs and docroot
-exec chown -R apache:apache /var/log/apache2 /var/www
+# Make sure apache can read&right to docroot
+chown -R apache:apache /var/www
