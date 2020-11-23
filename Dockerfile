@@ -133,7 +133,7 @@ RUN (crontab -l; echo "") | crontab -
 VOLUME ["/var/www"]
 
 # Change shell for apache user so that it can login
-RUN usermod -s bash apache
+RUN usermod -s /bin/bash apache
 
 # vhost config
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
