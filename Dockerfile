@@ -7,6 +7,7 @@ RUN apk update && \
 
 # Install packages
 RUN apk add --no-cache \
+    bash \
     # Init related
     tini \
     openrc \
@@ -131,8 +132,8 @@ RUN (crontab -l; echo "") | crontab -
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
 
-# Allow apache user login
-RUN sed -i "s/apache(.*)\/sbin\/nologin/apache\\1\/bin\/ash/g" /etc/passwd
+# Change shell for apache user so that it can login
+RUN usermod -s bash apache
 
 # vhost config
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
