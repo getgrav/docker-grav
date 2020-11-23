@@ -89,6 +89,8 @@ RUN \
 RUN chown -R apache:apache /var/www
 # Make sure apache can read&right to logs
 RUN chown -R apache:apache /var/log/apache2
+# Apache access to creating pid
+RUN chown -R apache:apache /run/apache2
 
 ### Continue execution as Apache user ###
 USER apache
