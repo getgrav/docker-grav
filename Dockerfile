@@ -137,4 +137,4 @@ RUN sed -i 's/apache(.*)\/sbin\/nologin/apache\1\/bin\/ash/g' /etc/passwd
 VOLUME ["/var/www"]
 
 # PHP-FPM vhost config
-COPY /config/vhost.conf /etc/apache2/conf.d/vhost.conf
+COPY vhost.conf /etc/apache2/conf.d/vhost.conf
