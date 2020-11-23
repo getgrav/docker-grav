@@ -100,7 +100,7 @@ ENV GRAV_VERSION latest
 
 # Install grav
 WORKDIR /var/www
-RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GRAV_VERSION} && \
+RUN curl -o grav-admin.zip -SLk https://getgrav.org/download/core/grav-admin/${GRAV_VERSION} && \
     unzip grav-admin.zip && \
     mv -f /var/www/grav-admin /var/www/html && \
     rm grav-admin.zip
