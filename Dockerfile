@@ -121,9 +121,7 @@ COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 # https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
 RUN sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
 
-# Start Apache by default
-RUN rc-update add httpd default
-# default PHP-FPM by default
+# Start PHP-FPM by default
 RUN rc-update add php-fpm7 default
 
 # Create cron job for Grav maintenance scripts
@@ -134,6 +132,14 @@ RUN (crontab -l; echo "") | crontab -
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
 
-COPY run.sh /run.sh
-RUN chmod u+x /run.sh
-CMD ["/run.sh"]
+# Allow apache user login
+RUN sed -i "s/apache(.*)\/sbin\/nologin/apache\\1\/bin\/ash/g" /etc/passwd
+# Make sure apache can read&right to docroot
+RUN chown -R apache:apache /var/www
+# Make sure apache can read&right to logs
+RUN chown -R apache:apache /var/log/apache2
+# Allow Apache to create pid
+RUN chown -R apache:apache /run/apache2
+
+# Start Apache
+CMD ["/usr/sbin/httpd", "-D"]
