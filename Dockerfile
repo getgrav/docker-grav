@@ -76,6 +76,8 @@ RUN \
     # Make sure PHP-FPM executes as apache user
     sed -i 's/user = nobody/user = apache/g' /etc/php7/php-fpm.d/www.conf && \
     sed -i 's/group = nobody/group = apache/g' /etc/php7/php-fpm.d/www.conf && \
+    # Shortcut cli commands
+    echo 'alias l="ls -la"; alias s="cd .."' >> ~/.profile && \
     # Prepare Apache log dir
     mkdir -p /var/log/apache2 && \
     # Clean base directory
@@ -89,8 +91,6 @@ RUN \
 RUN chown -R apache:apache /var/www
 # Make sure apache can read&right to logs
 RUN chown -R apache:apache /var/log/apache2
-# Apache access to creating pid
-RUN chown -R apache:apache /run/apache2
 
 ### Continue execution as Apache user ###
 USER apache
@@ -136,7 +136,11 @@ RUN chown -R apache:apache /var/www
 # Make sure apache can read&right to logs
 RUN chown -R apache:apache /var/log/apache2
 # Allow apache user login
-RUN sed -i 's/apache(.*)\/sbin\/nologin/apache\1\/bin\/ash/g' /etc/passwd
+RUN sed -i 's/apache(.*)\/sbin\/nologin/apache\\1\/bin\/ash/g' /etc/passwd
 
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
+
+COPY run.sh /run.sh
+RUN chmod u+x /run.sh
+CMD ["/run.sh"]
