@@ -131,13 +131,6 @@ RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/bin/php bin/grav schedule
 # Cron requires that each entry in a crontab end in a newline character. If the last entry in a crontab is missing the newline, cron will consider the crontab (at least partially) broken and refuse to install it.
 RUN (crontab -l; echo "") | crontab -
 
-# Make sure apache can read&right to docroot
-RUN chown -R apache:apache /var/www
-# Make sure apache can read&right to logs
-RUN chown -R apache:apache /var/log/apache2
-# Allow apache user login
-RUN sed -i 's/apache(.*)\/sbin\/nologin/apache\\1\/bin\/ash/g' /etc/passwd
-
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
 
