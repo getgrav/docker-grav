@@ -112,6 +112,9 @@ EXPOSE 80
 ### Return to root user ###
 USER root
 
+# vhost config
+COPY vhost.conf /etc/apache2/conf.d/vhost.conf
+
 # syslog option '-Z' was changed to '-t', change this in /etc/conf.d/syslog so that syslog (and then cron) actually starts
 # https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
 RUN sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
@@ -135,6 +138,3 @@ RUN sed -i 's/apache(.*)\/sbin\/nologin/apache\1\/bin\/ash/g' /etc/passwd
 
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
-
-# PHP-FPM vhost config
-COPY vhost.conf /etc/apache2/conf.d/vhost.conf
