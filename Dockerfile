@@ -81,7 +81,7 @@ RUN \
     # Clean base directory
     rm -rf /var/www/* && \
     # Apache configs in one place
-    mkdir -p /usr/local/apache && \
+    mkdir -p /run/apache2 /usr/local/apache && \
     ln -s /usr/lib/apache2 /usr/local/apache/modules && \
     ln -s /var/log/apache2 /usr/local/apache/logs
 
