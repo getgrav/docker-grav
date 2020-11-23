@@ -142,4 +142,4 @@ RUN chown -R apache:apache /var/log/apache2
 RUN chown -R apache:apache /run/apache2
 
 # Start Apache
-CMD ["/usr/sbin/httpd", "-D"]
+CMD ["/usr/sbin/httpd -k start"]
