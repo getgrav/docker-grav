@@ -116,9 +116,6 @@ USER root
 # https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
 RUN sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
 
-# PHP-FPM vhost config
-COPY /config/vhost.conf /etc/apache2/conf.d/vhost.conf
-
 # Start Apache by default
 RUN rc-update add httpd default
 # default PHP-FPM by default
@@ -138,3 +135,6 @@ RUN sed -i 's/apache(.*)\/sbin\/nologin/apache\1\/bin\/ash/g' /etc/passwd
 
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
+
+# PHP-FPM vhost config
+COPY /config/vhost.conf /etc/apache2/conf.d/vhost.conf
