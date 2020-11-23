@@ -91,6 +91,8 @@ RUN \
 RUN chown -R apache:apache /var/www
 # Make sure apache can read&right to logs
 RUN chown -R apache:apache /var/log/apache2
+# Allow Apache to create pid
+RUN chown -R apache:apache /run/apache2
 
 ### Continue execution as Apache user ###
 USER apache
@@ -114,9 +116,6 @@ EXPOSE 80
 ### Return to root user ###
 USER root
 
-# vhost config
-COPY vhost.conf /etc/apache2/conf.d/vhost.conf
-
 # syslog option '-Z' was changed to '-t', change this in /etc/conf.d/syslog so that syslog (and then cron) actually starts
 # https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
 RUN sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
@@ -134,12 +133,9 @@ VOLUME ["/var/www"]
 
 # Allow apache user login
 RUN sed -i "s/apache(.*)\/sbin\/nologin/apache\\1\/bin\/ash/g" /etc/passwd
-# Make sure apache can read&right to docroot
-RUN chown -R apache:apache /var/www
-# Make sure apache can read&right to logs
-RUN chown -R apache:apache /var/log/apache2
-# Allow Apache to create pid
-RUN chown -R apache:apache /run/apache2
+
+# vhost config
+COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
 # Start Apache
 CMD ["/usr/sbin/httpd -k start"]
