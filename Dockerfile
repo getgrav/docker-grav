@@ -8,6 +8,7 @@ RUN apk update && \
 # Install packages
 RUN apk add --no-cache \
     bash \
+    busybox-suid \
     # Init related
     tini \
     openrc \
