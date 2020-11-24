@@ -111,6 +111,11 @@ RUN curl -o grav-admin.zip -SLk https://getgrav.org/download/core/grav-admin/${G
 # Update Grav plugins
 RUN cd /var/www/html && bin/gpm -y update
 
+# Create cron job for Grav maintenance scripts
+RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -u apache -
+# Cron requires that each entry in a crontab end in a newline character. If the last entry in a crontab is missing the newline, cron will consider the crontab (at least partially) broken and refuse to install it.
+RUN (crontab -l; echo "") | crontab -u apache -
+
 # Accept incoming HTTP requests
 EXPOSE 80
 
@@ -123,11 +128,6 @@ RUN sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
 
 # Start PHP-FPM by default
 RUN rc-update add php-fpm7 default
-
-# Create cron job for Grav maintenance scripts
-RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -u apache -
-# Cron requires that each entry in a crontab end in a newline character. If the last entry in a crontab is missing the newline, cron will consider the crontab (at least partially) broken and refuse to install it.
-RUN (crontab -l; echo "") | crontab -u apache -
 
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
