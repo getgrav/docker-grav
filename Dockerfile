@@ -49,6 +49,13 @@ RUN apk add --no-cache \
     vim \
     shadow
 
+# Change shell to bash
+RUN usermod -s /bin/bash root
+# Bash config updates for root user
+RUN cd && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+# Initialize bash updates
+RUN source ~/.bashrc
+
 # Configure to use php fpm and don't use /var/www to store everything (modules and logs)
 RUN \
     # Disable mpm_prefork
@@ -96,8 +103,21 @@ RUN chown -R apache:apache /var/log/apache2
 # Allow Apache to create pid
 RUN chown -R apache:apache /run/apache2
 
+# Change shell for apache user so that it can login
+RUN usermod -s /bin/bash apache
+
+# Some shell aliases
+RUN echo "alias l='ls -la' \
+    alias s='cd ..' \
+    alias grep='grep --color=auto'" > /var/www/.bashrc
+
 ### Continue execution as Apache user ###
 USER apache
+
+# Bash config updates for apache user
+RUN cd && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+# Initialize bash updates
+RUN source ~/.bashrc
 
 # Define Grav specific version of Grav or use latest stable
 ENV GRAV_VERSION latest
@@ -117,6 +137,11 @@ RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/bin/php bin/grav schedule
 # Cron requires that each entry in a crontab end in a newline character. If the last entry in a crontab is missing the newline, cron will consider the crontab (at least partially) broken and refuse to install it.
 RUN (crontab -l; echo "") | crontab -
 
+# Generate RSA keys to be able to use 'git clone' with a public key
+RUN echo -e 'y' | ssh-keygen -t rsa -b 4096 -q -N "" -f ~/.ssh/id_rsa
+# Make sure no one but the owner can read the private key
+RUN chmod 600 ~/.ssh/id_rsa
+
 # Accept incoming HTTP requests
 EXPOSE 80
 
@@ -127,17 +152,11 @@ USER root
 # https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
 RUN sed -i 's/SYSLOGD_OPTS="-Z"/SYSLOGD_OPTS="-t"/g' /etc/conf.d/syslog
 
-# Start PHP-FPM by default
-RUN rc-update add php-fpm7 default
-
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
-
-# Change shell for apache user so that it can login
-RUN usermod -s /bin/bash apache
 
 # vhost config
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
-# Start Apache
-CMD ["/usr/sbin/httpd -k start"]
+# Start PHP-FPM and Apache
+CMD php-fpm7 -D && httpd
