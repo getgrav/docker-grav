@@ -136,7 +136,7 @@ RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/bin/php bin/grav schedule
 RUN (crontab -l; echo "") | crontab -
 
 # Generate RSA keys to be able to use 'git clone' with a public key
-RUN echo -e 'y' | ssh-keygen -t rsa -b 4096 -q -N "" -f ~/.ssh/id_rsa
+RUN echo -e 'y' | /usr/bin/ssh-keygen -t rsa -b 4096 -q -N "" -f ~/.ssh/id_rsa
 # Make sure no one but the owner can read the private key
 RUN chmod 600 ~/.ssh/id_rsa
 
