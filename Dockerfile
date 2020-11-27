@@ -50,7 +50,7 @@ RUN apk add --no-cache \
     shadow
 
 # Change shell to bash
-RUN usermod -s /bin/bash root && /bin/bash
+RUN usermod -s /bin/bash root && bash
 # Bash config updates for root user
 RUN cd && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 # Initialize bash updates
@@ -104,7 +104,7 @@ RUN chown -R apache:apache /var/log/apache2
 RUN chown -R apache:apache /run/apache2
 
 # Change shell for apache user so that it can login
-RUN usermod -s /bin/bash apache && /bin/bash
+RUN usermod -s /bin/bash apache
 
 # Some shell aliases
 RUN echo "alias l='ls -la' \
@@ -114,6 +114,8 @@ RUN echo "alias l='ls -la' \
 ### Continue execution as Apache user ###
 USER apache
 
+# Change to bash
+RUN bash
 # Bash config updates for apache user
 RUN cd && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 # Initialize bash updates
