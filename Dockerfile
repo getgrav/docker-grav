@@ -53,8 +53,6 @@ RUN apk add --no-cache \
 RUN usermod -s /bin/bash root && bash
 # Bash config updates for root user
 RUN cd && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
-# Initialize bash updates
-RUN source ~/.bashrc
 
 # Configure to use php fpm and don't use /var/www to store everything (modules and logs)
 RUN \
@@ -118,8 +116,6 @@ USER apache
 RUN bash
 # Bash config updates for apache user
 RUN cd && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
-# Initialize bash updates
-RUN source ~/.bashrc
 
 # Define Grav specific version of Grav or use latest stable
 ENV GRAV_VERSION latest
