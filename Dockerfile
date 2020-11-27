@@ -9,6 +9,7 @@ RUN apk update && \
 RUN apk add --no-cache \
     bash \
     busybox-suid \
+    openssh-keygen \
     # Init related
     tini \
     openrc \
