@@ -82,6 +82,8 @@ RUN \
     sed -i 's/memory_limit.*/memory_limit = 2G/g' /etc/php7/php.ini && \
     # max_execution_time to 5min
     sed -i 's/max_execution_time.*/max_execution_time = 300/g' /etc/php7/php.ini && \
+    # max_input_time to 2min
+    sed -i 's/max_input_time.*/max_input_time = 120/g' /etc/php7/php.ini && \
     # Change DocumentRoot to /var/www
     sed -i 's/var\/www\/localhost\/htdocs/var\/www\/html/g' /etc/apache2/httpd.conf && \
     # Change ServerRoot to /usr/local/apache
