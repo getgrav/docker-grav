@@ -7,9 +7,12 @@ RUN apk update && \
 
 # Install packages
 RUN apk add --no-cache \
+    autoconf \
+    automake \
     bash \
     busybox-suid \
     openssh-keygen \
+    mandoc \
     # Init related
     tini \
     openrc \
@@ -51,7 +54,7 @@ RUN apk add --no-cache \
     shadow
 
 # Change shell to bash
-RUN usermod -s /bin/bash root && bash
+RUN usermod -s /bin/bash root && bash --login
 # Bash config updates for root user
 RUN cd && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
@@ -114,7 +117,7 @@ RUN echo "alias l='ls -la' \
 USER apache
 
 # Change to bash
-RUN bash
+RUN bash --login
 # Bash config updates for apache user
 RUN cd && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
@@ -158,4 +161,4 @@ VOLUME ["/var/www"]
 COPY vhost.conf /etc/apache2/conf.d/vhost.conf
 
 # Start PHP-FPM and Apache
-CMD php-fpm7 -D && httpd
+CMD crond && php-fpm7 -D && httpd
