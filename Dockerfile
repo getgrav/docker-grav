@@ -43,4 +43,4 @@ VOLUME ["/var/www"]
 
 COPY example.php /var/www
 
-CMD php /var/www/example.php
+CMD cd /var/www && php server.php
