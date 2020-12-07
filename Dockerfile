@@ -41,6 +41,6 @@ EXPOSE 80
 # Provide container inside image for data persistence
 VOLUME ["/var/www"]
 
-COPY example.php /var/www
+COPY server.php /var/www
 
 CMD cd /var/www && php server.php
