@@ -1,4 +1,7 @@
+#!/usr/bin/env php
 <?php
+
+require "./vendor/autoload.php";
 
 use Amp\Http\Server\RequestHandler\CallableRequestHandler;
 use Amp\Http\Server\HttpServer;

@@ -13,7 +13,7 @@ RUN apk add --no-cache \
     tini \
     openrc \
     busybox-initscripts \
-    # Needed packages
+    # Required packages
     composer \
     grep \
     git \
@@ -22,7 +22,9 @@ RUN apk add --no-cache \
     shadow \
     supervisor \
     inotify-tools \
-    php7
+    # PHP related
+    php7 \
+    php7-pcntl
 
 # Syslog option '-Z' was changed to '-t', change this in /etc/conf.d/syslog so that syslog (and then cron) actually starts
 # https://gitlab.alpinelinux.org/alpine/aports/-/issues/9279
