@@ -8,12 +8,12 @@ use Amp\Http\Status;
 use Amp\Socket\Server;
 use Psr\Log\NullLogger;
 
-// Run this script, then visit http://localhost:1337/ in your browser.
+// Run this script, then visit http://localhost:80/ in your browser.
 
 Amp\Loop::run(function () {
     $sockets = [
-        Server::listen("0.0.0.0:1337"),
-        Server::listen("[::]:1337"),
+        Server::listen("0.0.0.0:80"),
+        Server::listen("[::]:80"),
     ];
 
     $server = new HttpServer($sockets, new CallableRequestHandler(function (Request $request) {
