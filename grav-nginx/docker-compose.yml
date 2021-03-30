@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  grav:
+    image: gushmazuko/grav-nginx:latest
+    container_name: ${SERVICE}_grav
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - grav:/usr/share/nginx/html
+#      - ./conf/nginx/:/etc/nginx/conf.d/
+#      - ./conf/php/:/etc/php/7.3/fpm/pool.d/
+    labels:
+      - "traefik.enable=true"
+      # http
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.services.${SERVICE}.loadbalancer.server.port=${SERVICE_PORT}"
+      - "traefik.http.routers.${SERVICE}_redirect.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.routers.${SERVICE}_redirect.entrypoints=web"
+      # redirect to https
+      - "traefik.http.routers.${SERVICE}.tls.certresolver=le"
+      - "traefik.http.routers.${SERVICE}.entrypoints=web-secure"
+      - "traefik.http.middlewares.${SERVICE}_https.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE}_redirect.middlewares=${SERVICE}_https"
+      # auth with authelia
+      # - "traefik.http.routers.${SERVICE}.middlewares=authelia@file"
+    networks:
+      - web
+networks:
+  web:
+    external: true
+
+volumes:
+  grav:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/grav_data
+      o: bind
