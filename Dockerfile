@@ -54,11 +54,11 @@ USER www-data
 # Define Grav specific version of Grav or use latest stable
 ARG GRAV_VERSION=latest
 
-# Install grav
+# Install grav (skip user dir)
 WORKDIR /var/www
 RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GRAV_VERSION} && \
     unzip grav-admin.zip && \
-    mv -T /var/www/grav-admin /var/www/html && \
+    for file in $(ls -A "grav-admin/" | egrep -v user); do mv "grav-admin/$file" "html/"; done && \
     rm grav-admin.zip
 
 # Create cron job for Grav maintenance scripts
@@ -70,9 +70,21 @@ USER root
 # Copy init scripts
 # COPY docker-entrypoint.sh /entrypoint.sh
 
+# Create script that populates user dir
+RUN { \
+    echo '#!/bin/bash'; \
+    echo '# Ensure user dir exists'; \
+    echo 'sudo -iu www-data mkdir -p /var/www/html/user/'; \
+    echo '# Populate user dir if it is empty'; \
+    echo 'if test -n "$(find /var/www/html/user -maxdepth 0 -empty)" ; then'; \
+    echo 'cp -rp /var/www/grav-admin/user/* /var/www/html/user/'; \
+    echo 'fi'; \
+    } > /usr/local/bin/populate-userdir && \
+    chmod +x /usr/local/bin/populate-userdir
+
 # provide container inside image for data persistence
-VOLUME ["/var/www/html"]
+VOLUME ["/var/www/html/backup", "/var/www/html/logs", "/var/www/html/user"]
 
 # ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["apache2-foreground"]
-CMD ["sh", "-c", "cron && apache2-foreground"]
+CMD ["sh", "-c", "populate-userdir && cron && apache2-foreground"]
