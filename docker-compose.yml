@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+    grav:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: grav
+        restart: always
+        depends_on:
+            - db
+        ports:
+            - 80:80
+        networks:
+            - frontend
+            - backend
+        volumes:
+            - grav-volume:/var/www/html
+    db:
+        image: mysql:8.0
+        container_name: db
+        restart: always
+        #ports:
+            #- 3306:3306
+        networks:
+            - backend
+        volumes:
+            - db-volume:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: "MYSQLDB"
+            MYSQL_USER: "DBUSER"
+            MYSQL_PASSWORD: "DBPASS"
+            MYSQL_ROOT_PASSWORD: "DBADMINPASS"
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        restart: always
+        depends_on:
+            - db
+        ports:
+            - 8000:80
+        networks:
+            - frontend
+            - backend
+        environment:
+            MYSQL_USER: "DBUSER"
+            MYSQL_PASSWORD: "DBPASS"
+            MYSQL_ROOT_PASSWORD: "DBADMINPASS"
+networks:
+    frontend:
+    backend:
+volumes:
+    grav-volume:
+    db-volume:
