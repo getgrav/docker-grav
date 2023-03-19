@@ -74,7 +74,9 @@ USER root
 RUN { \
     echo '#!/bin/bash'; \
     echo '# Ensure user dir exists'; \
-    echo 'sudo -iu www-data mkdir -p /var/www/html/user/'; \
+    echo 'mkdir -p /var/www/html/user/'; \
+    echo '# Ensure user dir is owned by user www-data'; \
+    echo 'chown www-data: /var/www/html/user/'; \
     echo '# Populate user dir if it is empty'; \
     echo 'if test -n "$(find /var/www/html/user -maxdepth 0 -empty)" ; then'; \
     echo 'cp -rp /var/www/grav-admin/user/* /var/www/html/user/'; \
