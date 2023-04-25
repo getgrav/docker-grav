@@ -2,13 +2,13 @@
 
 This currently is pretty minimal and uses:
 
-* apache-2.4.38
+* apache-2.4.56
 * GD library
 * Unzip library
-* php7.4
-* php7.4-opcache
-* php7.4-acpu
-* php7.4-yaml
+* php8.3
+* php8.3-opcache
+* php8.3-acpu
+* php8.3-yaml
 * cron
 * vim editor
 
