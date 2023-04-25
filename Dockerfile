@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.1.28-apache-bullseye
 LABEL maintainer="Andy Miller <rhuk@getgrav.org> (@rhukster)"
 
 # Enable Apache Rewrite + Expires Module
@@ -44,7 +44,7 @@ RUN { \
     } > /usr/local/etc/php/conf.d/php-recommended.ini
 
 RUN pecl install apcu \
-    && pecl install yaml-2.0.4 \
+    && pecl install yaml-2.2.3 \
     && docker-php-ext-enable apcu yaml
 
 # Set user to www-data
