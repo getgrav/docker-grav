@@ -5,10 +5,10 @@ This currently is pretty minimal and uses:
 * apache-2.4.38
 * GD library
 * Unzip library
-* php7.4
-* php7.4-opcache
-* php7.4-acpu
-* php7.4-yaml
+* php8.1
+* php8.1-opcache
+* php8.1-acpu
+* php8.1-yaml
 * cron
 * vim editor
 
