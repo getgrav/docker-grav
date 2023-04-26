@@ -2,7 +2,7 @@
 
 This currently is pretty minimal and uses:
 
-* apache-2.4.38
+* apache-2.4.56
 * GD library
 * Unzip library
 * php8.1
