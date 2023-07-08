@@ -8,6 +8,8 @@ RUN a2enmod rewrite expires && \
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    tini \
+    lsb-release \
     unzip \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
