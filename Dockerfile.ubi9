@@ -1,0 +1,50 @@
+FROM registry.access.redhat.com/ubi9/php-81
+
+# Install dependencies
+USER root
+RUN dnf remove --disableplugin subscription-manager --disableplugin product-id -y subscription-manager && \
+    dnf install -y cronie && \
+    dnf clean all
+
+# Reset to default application user
+USER default
+
+# Define Grav version
+ARG GRAV_VERSION=latest
+
+# Unpack Grav
+WORKDIR /tmp
+RUN curl -o grav-admin.zip -fL --no-progress-meter https://getgrav.org/download/core/grav-admin/${GRAV_VERSION} && \
+    unzip grav-admin.zip && \
+    mv grav-admin/* grav-admin/.[!.]* /opt/app-root/src/ && \
+    rm -rf grav-admin*
+
+# Reset working directory back to s2i default
+WORKDIR /opt/app-root/src
+
+#######
+# Here you can do pre-configuration of the image if needed.
+#######
+# For example, install Grav plugins or themes
+#
+#RUN bin/gpm direct-install -y https://getgrav.org/download/plugins/anchors/1.6.0 && \
+#    bin/gpm direct-install -y https://getgrav.org/download/plugins/external_links/1.6.3
+
+# Or run needed scripts to pre-create things
+#RUN bin/plugin tntsearch index
+
+# Or do customizations via patches
+#RUN --mount=type=bind,source=patches/,target=/tmp/patches \
+#    patch -p1 -d user/plugins/tntsearch < /tmp/patches/tntsearch.patch
+
+# Or just overwrite full files with your own copy
+#COPY --chown=default:root pages/ ./user/pages
+#######
+
+# Create cron job for Grav maintenance scripts
+RUN (crontab -l; echo "* * * * * cd /opt/app-root/src;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
+
+# Provide a volume inside image for data persistence
+VOLUME ["/opt/app-root/src"]
+
+CMD /usr/libexec/s2i/run
