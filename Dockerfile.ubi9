@@ -4,7 +4,8 @@ FROM registry.access.redhat.com/ubi9/php-81
 USER root
 RUN dnf remove --disableplugin subscription-manager --disableplugin product-id -y subscription-manager && \
     dnf install -y cronie && \
-    dnf clean all
+    dnf clean all && \
+    chown default:root /var/run && setcap cap_setuid=ep /usr/sbin/crond
 
 # Reset to default application user
 USER default
@@ -43,6 +44,7 @@ WORKDIR /opt/app-root/src
 
 # Create cron job for Grav maintenance scripts
 RUN (crontab -l; echo "* * * * * cd /opt/app-root/src;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
+COPY --chown=default:root php-pre-start/ ./php-pre-start
 
 # Provide a volume inside image for data persistence
 VOLUME ["/opt/app-root/src"]
