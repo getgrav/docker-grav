@@ -5,7 +5,8 @@ USER root
 RUN dnf remove --disableplugin subscription-manager --disableplugin product-id -y subscription-manager && \
     dnf install -y cronie && \
     dnf clean all && \
-    chown default:root /var/run && setcap cap_setuid=ep /usr/sbin/crond
+    chown default:root /var/run && setcap "cap_setuid=ep cap_setgid=ep" /usr/sbin/crond && \
+    sed -i 's/\(account     required      pam_unix.so\)/\1 broken_shadow/g' /etc/pam.d/system-auth
 
 # Reset to default application user
 USER default
