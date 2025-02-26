@@ -71,7 +71,7 @@ USER root
 # COPY docker-entrypoint.sh /entrypoint.sh
 
 # provide container inside image for data persistence
-VOLUME ["/var/www/html"]
+VOLUME ["/var/www/html/backup", "/var/www/html/logs", "/var/www/html/user"]
 
 # ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["apache2-foreground"]
