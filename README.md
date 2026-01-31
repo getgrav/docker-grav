@@ -10,8 +10,6 @@ Official Docker image for [Grav CMS](https://getgrav.org) - a modern, fast, and 
 - `latest`, `1.7`, `php8.3` - Grav with PHP 8.3 (default)
 - `php8.5` - Grav with PHP 8.5 (latest PHP)
 - `php8.4` - Grav with PHP 8.4
-- `php8.2` - Grav with PHP 8.2
-- `php8.1` - Grav with PHP 8.1
 
 ## Quick Start
 

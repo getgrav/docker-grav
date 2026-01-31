@@ -17,8 +17,6 @@ Open http://localhost:8080 - Grav installs automatically on first run.
 | `latest`, `php8.3` | PHP 8.3 (default) |
 | `php8.5` | PHP 8.5 (latest) |
 | `php8.4` | PHP 8.4 |
-| `php8.2` | PHP 8.2 |
-| `php8.1` | PHP 8.1 |
 
 ## Docker Compose
 

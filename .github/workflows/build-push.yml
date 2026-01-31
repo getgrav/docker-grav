@@ -46,10 +46,6 @@ jobs:
             default: false
           - php: "8.4"
             default: false
-          - php: "8.2"
-            default: false
-          - php: "8.1"
-            default: false
 
     steps:
       - name: Checkout repository
