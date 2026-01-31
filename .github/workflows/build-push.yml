@@ -24,7 +24,6 @@ on:
       - 'Dockerfile'
       - 'docker-entrypoint.sh'
       - 'config/**'
-      - '.github/workflows/build-push.yml'
 
 env:
   REGISTRY: docker.io
