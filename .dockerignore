@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+LICENSE
+
+# macOS
+.DS_Store
+._*
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Docker Compose files (not needed in image)
+docker-compose*.yml
+docker-compose*.yaml
+
+# Local development
+site/
+grav/
+.env
+.env.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.log

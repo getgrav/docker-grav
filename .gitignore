@@ -1,0 +1,20 @@
+# Local Grav site (testing artifacts)
+site/
+grav/
+
+# Environment files
+.env
+.env.*
+
+# macOS
+.DS_Store
+._*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log

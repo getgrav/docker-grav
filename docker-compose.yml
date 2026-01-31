@@ -1,0 +1,70 @@
+# =============================================================================
+# Grav CMS - Docker Compose Configuration
+# =============================================================================
+#
+# Quick Start:
+#   docker compose up -d
+#   Open http://localhost:8080
+#
+# PHP Version:
+#   Edit PHP_VERSION below or use:
+#   PHP_VERSION=8.4 docker compose up -d --build
+#
+# =============================================================================
+
+services:
+  grav:
+    build:
+      context: .
+      args:
+        PHP_VERSION: "${PHP_VERSION:-8.3}"
+        PHP_EXTRA_EXTENSIONS: "${PHP_EXTRA_EXTENSIONS:-}"
+        GRAV_VERSION: "${GRAV_VERSION:-latest}"
+    ports:
+      - "${GRAV_PORT:-8080}:80"
+    volumes:
+      # Bind mount for local development
+      # Your Grav site will be in ./site directory
+      - ./site:/var/www/html
+    environment:
+      # Install Grav if ./site is empty (set to false to skip)
+      - GRAV_SETUP=${GRAV_SETUP:-true}
+      # Enable Grav scheduler cron job
+      - GRAV_SCHEDULER=${GRAV_SCHEDULER:-true}
+      # Fix permissions on startup (useful after git operations)
+      - FIX_PERMISSIONS=${FIX_PERMISSIONS:-false}
+    restart: unless-stopped
+
+# =============================================================================
+# Alternative Configurations (uncomment to use)
+# =============================================================================
+
+# Production with named volume (better performance, no direct file access):
+#
+# services:
+#   grav:
+#     build: .
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - grav_data:/var/www/html
+#     restart: always
+#
+# volumes:
+#   grav_data:
+
+# Development with Xdebug:
+#
+# services:
+#   grav:
+#     build:
+#       context: .
+#       args:
+#         PHP_EXTRA_EXTENSIONS: "xdebug"
+#     ports:
+#       - "8080:80"
+#     volumes:
+#       - ./site:/var/www/html
+#     environment:
+#       - XDEBUG_MODE=debug
+#       - XDEBUG_CONFIG=client_host=host.docker.internal

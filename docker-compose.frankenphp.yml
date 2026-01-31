@@ -1,0 +1,85 @@
+# =============================================================================
+# Grav CMS - FrankenPHP (Experimental)
+# =============================================================================
+#
+# FrankenPHP is a modern PHP application server built on Caddy.
+# This is an EXPERIMENTAL configuration for testing purposes.
+#
+# Features:
+#   - Built-in HTTPS with automatic certificates
+#   - HTTP/3 support
+#   - Worker mode for better performance
+#   - Smaller memory footprint
+#
+# Usage:
+#   docker compose -f docker-compose.frankenphp.yml up -d
+#   Open https://localhost (note: HTTPS, not HTTP)
+#
+# Requirements:
+#   - FrankenPHP image with required extensions
+#   - Grav installation in ./site directory
+#
+# Note: This requires manual Grav installation as there's no entrypoint script.
+#       Download Grav manually: https://getgrav.org/downloads
+#
+# =============================================================================
+
+services:
+  grav:
+    image: dunglas/frankenphp:latest-php8.3-bookworm
+    ports:
+      # HTTPS (with auto-generated certificate)
+      - "443:443"
+      # HTTP (redirects to HTTPS)
+      - "80:80"
+      # HTTP/3 (QUIC)
+      - "443:443/udp"
+    volumes:
+      # Mount your Grav installation
+      - ./site:/app/public
+      # Caddy configuration
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      # Caddy data (certificates, etc.)
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      # Server name (use localhost for development)
+      SERVER_NAME: "${SERVER_NAME:-localhost}"
+      # PHP memory limit
+      PHP_MEMORY_LIMIT: "512M"
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+# =============================================================================
+# Notes:
+# =============================================================================
+#
+# 1. Install required PHP extensions:
+#    The FrankenPHP image may need additional extensions. You can create a
+#    custom Dockerfile:
+#
+#    FROM dunglas/frankenphp:latest-php8.3-bookworm
+#    RUN install-php-extensions gd intl zip yaml apcu opcache
+#
+# 2. Caddyfile configuration (save as config/Caddyfile):
+#
+#    {
+#        frankenphp
+#    }
+#
+#    localhost {
+#        root * /app/public
+#        php_server
+#    }
+#
+# 3. Manual Grav installation:
+#    mkdir -p site
+#    curl -L https://getgrav.org/download/core/grav-admin/latest -o grav.zip
+#    unzip grav.zip
+#    mv grav-admin/* site/
+#    rm -rf grav-admin grav.zip
+#
+# =============================================================================
