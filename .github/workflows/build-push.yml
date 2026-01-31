@@ -84,18 +84,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  update-readme:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Update Docker Hub description
-        uses: peter-evans/dockerhub-description@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: getgrav/grav
-          short-description: "Official Grav CMS Docker Image"
-          readme-filepath: ./README.md
+  # Note: Docker Hub description is managed manually via web UI
+  # The API requires password auth (not access tokens) and is blocked by Cloudflare
