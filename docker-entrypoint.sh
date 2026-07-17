@@ -101,7 +101,8 @@ setup_cron() {
     CRON_JOB="* * * * * cd ${GRAV_HOME} && /usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1"
 
     # Add to www-data's crontab if not already present
-    (crontab -u www-data -l 2>/dev/null | grep -v "grav scheduler"; echo "${CRON_JOB}") | crontab -u www-data -
+    CRONTAB=$(crontab -u www-data -l 2>/dev/null | grep -v "grav scheduler"; echo "${CRON_JOB}") 
+    echo "${CRONTAB}" | crontab -u www-data -
 
     log_info "Cron job configured!"
 }
