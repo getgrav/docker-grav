@@ -98,7 +98,7 @@ setup_cron() {
     log_info "Setting up Grav scheduler cron job..."
 
     # Create cron job for Grav scheduler
-    CRON_JOB="* * * * * cd ${GRAV_HOME} && /usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1"
+    CRON_JOB="* * * * * cd ${GRAV_HOME};/usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1"
 
     # Add to www-data's crontab if not already present
     local CRONTAB
