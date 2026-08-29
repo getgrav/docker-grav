@@ -15,11 +15,22 @@ Official Docker image for [Grav CMS](https://getgrav.org) - a modern, fast, and 
 
 ```bash
 # Pull and run
-docker run -d -p 8080:80 -v grav_site:/var/www/html getgrav/grav
+docker run -d -p 8080:80 -e FIX_PERMISSIONS=true -v grav_site:/var/www/html getgrav/grav
 
 # Open browser
 open http://localhost:8080
 ```
+
+**Command breakdown:**
+
+| Flag | Description |
+|------|-------------|
+| `docker run` | Creates and starts a new container |
+| `-d` | Runs in **detached mode** (background), so your terminal stays free |
+| `-p 8080:80` | **Port mapping** - maps port 8080 on your machine to port 80 inside the container where Apache listens. Change `8080` to any available port you prefer |
+| `-e FIX_PERMISSIONS=true` | **Environment variable** - ensures file permissions are set correctly on startup, avoiding common permission issues |
+| `-v grav_site:/var/www/html` | **Named volume** - `grav_site` is just a label (not a folder on your machine); Docker manages the actual storage internally. This volume is mounted to `/var/www/html` inside the container (where Grav lives). Data persists between container restarts. Use a bind mount like `-v ./my-folder:/var/www/html` if you want files on your local filesystem |
+| `getgrav/grav` | The official Grav image from Docker Hub |
 
 That's it! Grav will be automatically installed on first run.
 
