@@ -62,7 +62,7 @@ volumes:
 #    custom Dockerfile:
 #
 #    FROM dunglas/frankenphp:latest-php8.3-bookworm
-#    RUN install-php-extensions gd intl zip yaml apcu opcache
+#    RUN install-php-extensions gd intl zip exif yaml apcu opcache
 #
 # 2. Caddyfile configuration (save as config/Caddyfile):
 #

@@ -3,7 +3,7 @@
 # =============================================================================
 # Build arguments:
 #   PHP_VERSION          - PHP version (default: 8.3)
-#   PHP_EXTENSIONS       - Core extensions (default: opcache intl gd zip)
+#   PHP_EXTENSIONS       - Core extensions (default: opcache intl gd zip exif)
 #   PHP_EXTRA_EXTENSIONS - Additional extensions (default: empty)
 #   GRAV_VERSION         - Grav version to install (default: latest)
 #
@@ -21,7 +21,7 @@ LABEL org.opencontainers.image.source="https://github.com/getgrav/docker-grav"
 LABEL org.opencontainers.image.description="Grav CMS Docker Image"
 
 # Build arguments for PHP extensions
-ARG PHP_EXTENSIONS="opcache intl gd zip"
+ARG PHP_EXTENSIONS="opcache intl gd zip exif"
 ARG PHP_EXTRA_EXTENSIONS=""
 ARG GRAV_VERSION=latest
 

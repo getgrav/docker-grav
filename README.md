@@ -144,7 +144,7 @@ docker build --build-arg PHP_VERSION=8.4 -t grav:php84 .
 
 ### Additional PHP Extensions
 
-Default extensions: `opcache`, `intl`, `gd`, `zip`, `apcu`, `yaml`
+Default extensions: `opcache`, `intl`, `gd`, `zip`, `exif`, `apcu`, `yaml`
 
 Add more:
 
